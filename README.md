@@ -1,93 +1,274 @@
-# prompts
+# VS Code Copilot Chat Modes, Instructions & Prompts Setup
 
+A comprehensive collection of custom chat modes, instruction files, and prompts for GitHub Copilot in Visual Studio Code, designed to enhance AI-assisted development workflows with specialized domain expertise.
 
+## Overview
 
-## Getting started
+This repository contains three types of Copilot customizations that extend GitHub Copilot's capabilities in VS Code:
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+- **Chat Modes**: Specialized AI assistants with custom behavior and context
+- **Instructions**: Reusable instruction templates for consistent AI guidance  
+- **Prompts**: Pre-defined prompts for common development tasks
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+These specialized configurations provide domain-specific guidance for database development, debugging, code reviews, and other specialized tasks.
 
-## Add your files
+## Types of Copilot Customizations
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+### 🤖 Chat Modes
+Custom instruction sets that modify how GitHub Copilot behaves in specific contexts. They allow you to:
+- Create specialized AI assistants for different domains (SQL, debugging, architecture, etc.)
+- Define specific tools and models to use
+- Set consistent behavior patterns for repetitive tasks
+- Maintain context-aware conversations
+
+### 📋 Instructions
+Reusable instruction templates that provide consistent guidance across different contexts:
+- Define coding standards and best practices
+- Set up domain-specific rules and constraints
+- Create templates for code reviews and documentation
+- Establish consistent output formats
+
+### 💡 Prompts
+Pre-defined prompts for common development scenarios:
+- Quick access to frequently used questions
+- Standardized request formats
+- Template prompts for specific tasks
+- Shareable prompt collections for teams
+
+## Quick Setup Guide
+
+### 1. Creating a New Chat Mode
+
+1. **Open VS Code**
+2. **Open Command Palette**: `Ctrl + Shift + P` (Windows/Linux) or `Cmd + Shift + P` (macOS)
+3. **Run Command**: Type and select `Chat: New Mode File`
+4. **Choose Location**: Select `User Data Folder` (recommended for personal use) or `Workspace` (for project-specific modes)
+5. **Name Your Mode**: Enter a descriptive name (e.g., `debug-sp`, `sql-optimizer`, `code-reviewer`)
+6. **Edit the File**: Paste your custom instructions in the generated `.chatmode.md` file
+
+### 2. Creating Instructions
+
+1. **Open VS Code**
+2. **Open Command Palette**: `Ctrl + Shift + P` (Windows/Linux) or `Cmd + Shift + P` (macOS)
+3. **Run Command**: Type and select `Chat: New Instruction File`
+4. **Choose Location**: Select `User Data Folder` (recommended for personal use) or `Workspace` (for project-specific instructions)
+5. **Name Your Instruction**: Enter a descriptive name (e.g., `T-SQL-Rules`, `Code-Review-Standards`, `API-Documentation`)
+6. **Edit the File**: Paste your instruction content in the generated `.instructions.md` file
+
+### 3. Creating Prompts
+
+1. **Open VS Code**
+2. **Open Command Palette**: `Ctrl + Shift + P` (Windows/Linux) or `Cmd + Shift + P` (macOS)
+3. **Run Command**: Type and select `Chat: New Prompt File`
+4. **Choose Location**: Select `User Data Folder` (recommended for personal use) or `Workspace` (for project-specific prompts)
+5. **Name Your Prompt**: Enter a descriptive name (e.g., `SQL-Performance-Check`, `Code-Optimization`, `Bug-Analysis`)
+6. **Edit the File**: Write your prompt content in the generated `.prompt.md` file
+
+### Chat Mode File Structure
+
+A chat mode file follows this basic structure:
+
+```markdown
+---
+description: 'Brief description of what this mode does'
+tools: [tool1, tool2]  # Optional: specific tools to enable
+model: 'Model Name'    # Optional: specific model to use
+---
+
+Your detailed instructions and prompts go here...
+```
+
+## Available Customizations
+
+### 🔧 Chat Modes
+
+#### Debug SP (Stored Procedure Debugger)
+**File**: `chatmodes/debug_sp.chatmode.md`
+
+An enterprise-level SQL Server stored procedure debugging assistant that:
+- Analyzes stored procedure dependencies recursively
+- Performs logical, data, and performance analysis
+- Generates comprehensive debug reports with fix suggestions
+- Safely handles data modifications with transaction wrapping
+
+**Usage**: Use when debugging complex SQL Server stored procedures or investigating performance issues.
+
+## Setup Instructions
+
+### Method 1: Using VS Code Command Palette (Recommended)
+
+#### For Chat Modes:
+1. Open VS Code
+2. Press `Ctrl + Shift + P` to open Command Palette
+3. Type and select `Chat: New Mode File`
+4. Choose storage location:
+   - **User Data Folder**: Available across all VS Code workspaces
+   - **Workspace**: Only available in current project
+5. Enter mode name (e.g., `debug-sp`)
+6. VS Code creates a `.chatmode.md` file
+7. Replace the template content with your custom instructions
+
+#### For Instructions:
+1. Open VS Code
+2. Press `Ctrl + Shift + P` to open Command Palette
+3. Type and select `Chat: New Instruction File`
+4. Choose storage location:
+   - **User Data Folder**: Available across all VS Code workspaces
+   - **Workspace**: Only available in current project
+5. Enter instruction name (e.g., `T-SQL-Rules`)
+6. VS Code creates a `.instructions.md` file
+7. Add your instruction content following the recommended structure
+
+#### For Prompts:
+1. Open VS Code
+2. Press `Ctrl + Shift + P` to open Command Palette
+3. Type and select `Chat: New Prompt File`
+4. Choose storage location:
+   - **User Data Folder**: Available across all VS Code workspaces
+   - **Workspace**: Only available in current project
+5. Enter prompt name (e.g., `SQL-Performance-Check`)
+6. VS Code creates a `.prompt.md` file
+7. Add your prompt collection following the recommended structure
+
+### Method 2: Manual File Creation
+
+#### File Locations:
+Navigate to your VS Code user data folder:
+- **Windows**: `%APPDATA%\Code\User\`
+- **macOS**: `~/Library/Application Support/Code/User/`
+- **Linux**: `~/.config/Code/User/`
+
+#### Create Folders:
+1. Create folders if they don't exist:
+   - `chatmodes/` for chat mode files
+   - `instructions/` for instruction files
+   - `prompts/` for prompt files
+2. Create files with appropriate extensions:
+   - `.chatmode.md` for chat modes
+   - `.instructions.md` for instructions
+   - `.prompt.md` for prompts
+
+### Method 3: Workspace-Specific Setup
+
+1. In your project root, create a `.vscode` folder
+2. Inside `.vscode`, create subfolders:
+   - `chatmodes/` 
+   - `instructions/`
+   - `prompts/`
+3. Add your files with appropriate extensions
+4. These customizations will only be available in this workspace
+
+## File Organization
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.nexdev.net/subarashi/database-ai/prompts.git
-git branch -M main
-git push -uf origin main
+📁 prompts/
+├── 📁 chatmodes/          # Custom chat mode definitions
+│   └── debug_sp.chatmode.md
+├── 📁 instructions/       # Reusable instruction templates
+└── 📁 prompts/           # General purpose prompts
 ```
 
-## Integrate with your tools
+## Best Practices
 
-- [ ] [Set up project integrations](https://gitlab.nexdev.net/subarashi/database-ai/prompts/-/settings/integrations)
+### Writing Effective Chat Modes
 
-## Collaborate with your team
+1. **Clear Description**: Start with a concise description in the frontmatter
+2. **Specific Instructions**: Be explicit about expected behavior and output format
+3. **Context Setting**: Define the role and expertise level clearly
+4. **Safety Measures**: Include safeguards for destructive operations
+5. **Output Format**: Specify desired response structure (Markdown, code blocks, etc.)
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+### Naming Conventions
 
-## Test and Deploy
+- Use lowercase with hyphens: `debug-sp.chatmode.md`
+- Be descriptive: `sql-performance-analyzer.chatmode.md`
+- Include domain: `frontend-code-reviewer.chatmode.md`
 
-Use the built-in continuous integration in GitLab.
+### Version Control
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+- Keep chat modes in version control for team sharing
+- Document changes in commit messages
+- Consider branching for experimental modes
 
-***
+## Usage Examples
 
-# Editing this README
+### Activating Chat Modes
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+1. Open Copilot Chat panel (`Ctrl + Shift + I`)
+2. Click the mode selector (usually shows "General")
+3. Select your custom mode from the dropdown
+4. Start chatting with your specialized assistant
 
-## Suggestions for a good README
+### Sample Interactions
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+**With Debug SP Mode**:
+```
+@copilot /debug-sp dbo.GetCustomerOrders
+```
 
-## Name
-Choose a self-explaining name for your project.
+**General Chat with Mode Active**:
+```
+Can you analyze this stored procedure for performance issues?
+[paste your SQL code]
+```
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+## Troubleshooting
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+### Chat Mode Not Appearing
+- Ensure file has `.chatmode.md` extension
+- Check frontmatter syntax (YAML between `---` markers)
+- Restart VS Code to reload modes
+- Verify file location (User Data vs Workspace)
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+### General Issues
+- **Mode/Instruction Not Working as Expected**:
+  - Review instruction clarity and specificity
+  - Check for conflicting instructions
+  - Test with simpler examples first
+  - Validate YAML frontmatter syntax (for chat modes)
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+- **Files Not Loading**:
+  - Check file extensions are correct
+  - Verify folder structure matches expectations
+  - Ensure no syntax errors in file content
+  - Try moving files to User Data folder instead of workspace
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+- **Performance Issues**:
+  - Limit number of active customizations
+  - Keep instruction files concise and focused
+  - Remove unused or duplicate files
 
 ## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+When adding new customizations:
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+### For Chat Modes:
+1. Follow the established file structure with proper frontmatter
+2. Include comprehensive documentation and examples
+3. Test thoroughly with various inputs and scenarios
+4. Add usage examples and expected behaviors
+5. Update this README with new modes
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+### General Guidelines:
+- Follow established naming conventions
+- Keep files focused on single purposes
+- Document dependencies and requirements
+- Include version information when relevant
+- Test across different VS Code configurations
+
+## Related Resources
+
+- [GitHub Copilot Documentation](https://docs.github.com/en/copilot)
+- [VS Code Copilot Chat](https://code.visualstudio.com/docs/copilot/copilot-chat)
+- [Prompt Engineering Best Practices](https://platform.openai.com/docs/guides/prompt-engineering)
 
 ## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Support
+
+For issues or questions:
+- Create an issue in this repository
+- Check existing chat modes for examples
+- Refer to VS Code Copilot documentation
