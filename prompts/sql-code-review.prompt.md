@@ -56,18 +56,21 @@ When a stored procedure name or SQL query is provided:
    - Highlight columns that lack indexing and recommend appropriate indexes.
 
 6. **Generate Execution Plan**:
-   - For the provided query or stored procedure, generate an execution plan using:
+   - **In SSMS or tools supporting `GO`:**
      ```sql
      SET SHOWPLAN_XML ON;
-     EXEC YourStoredProcedureName;
+     GO
+     EXEC YourStoredProcedureName; -- or your query
+     GO
      SET SHOWPLAN_XML OFF;
+     GO
      ```
-     Or for a direct query:
-     ```sql
-     SET SHOWPLAN_XML ON;
-     YourSQLQuery;
-     SET SHOWPLAN_XML OFF;
-     ```
+   - **In ODBC or programmatic environments:**
+     Send each statement as a separate batch:
+     1. `SET SHOWPLAN_XML ON;`
+     2. Your query or `EXEC YourStoredProcedureName;`
+     3. `SET SHOWPLAN_XML OFF;`
+   This ensures compatibility with both SSMS and ODBC.
 
 7. **Analyze and Recommend**:
    - Use the fetched schema, index details, and execution plan to:
