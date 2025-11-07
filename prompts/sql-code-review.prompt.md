@@ -4,7 +4,13 @@ tools: ['changes', 'codebase', 'editFiles', 'problems', 'execute_sql']
 description: 'Universal SQL code review assistant that performs comprehensive security, maintainability, and code quality analysis across all SQL databases (MySQL, PostgreSQL, SQL Server, Oracle). Focuses on SQL injection prevention, access control, code standards, and anti-pattern detection. Complements SQL optimization prompt for complete development coverage.'
 ---
 
-# SQL Code Review
+# SQL Code Review (Enhanced Advanced Edition)
+
+Version: 2.0  
+Purpose: High-fidelity, automated, multi-dimensional SQL Server (extensible to other RDBMS) review prompt with advanced analysis layers (performance, security, reliability, scalability, governance, maintainability).  
+Supports: Stored Procedures, Functions, Views, Ad‑hoc Queries, Migration Scripts, Multi-Statement Batches.  
+
+If model capability >= next-gen (e.g., GPT-5 or equivalent), enable "Advanced Depth Mode" features flagged below; otherwise gracefully degrade.
 
 Perform a thorough SQL code review of ${selection} (or entire project if no selection) focusing on security, performance, maintainability, and database best practices. Automatically fetch all necessary information using the `execute_sql` tool and perform a comprehensive review without requiring user input.
 
@@ -82,6 +88,29 @@ When a stored procedure name or SQL query is provided:
    - If nested stored procedures or functions are identified, repeat the above steps for each dependency.
 
 9. **Fallback Handling**:
+
+10. **(Optional) Collect Runtime Diagnostics** (if sandbox execution permitted):
+   - Capture SET STATISTICS IO, TIME output.
+   - Compare estimated vs actual rows; flag divergence ratio > 4x.
+   - Detect spills: worktable / workfile indications in execution plan.
+   - Identify memory grant warnings & excessive grant vs usage.
+
+11. **Multi-Statement Ordering Analysis**:
+   - Determine if earlier statements can be refactored to CTEs / temp tables / table variables.
+   - Detect unnecessary cursor usage; propose set-based alternative.
+
+12. **Parameter Sniffing Risk Assessment**:
+   - Look for parameter-sensitive predicates on highly skewed columns.
+   - Recommend OPTIMIZE FOR, OPTION (RECOMPILE), or plan-stabilizing patterns when justified.
+
+13. **Concurrency & Locking Model Check**:
+   - Infer expected isolation level; detect hints (WITH (NOLOCK), READUNCOMMITTED) misuse.
+   - Assess potential escalation risk (large range scans without covering indexes).
+   - Suggest batching or pagination for large modifications.
+
+14. **Change Impact Classification** (CRUD taxonomy + risk score):
+   - Classify query as: Read / Write / Mixed / DDL / Security-affecting.
+   - Compute risk score (see Advanced Metrics section).
    - If any required information cannot be fetched (e.g., due to missing permissions), provide clear fallback recommendations without asking for user intervention.
 
 ## 🔒 Security Analysis
@@ -108,6 +137,12 @@ EXEC sp_executesql N'SELECT * FROM users WHERE id = @id', N'@id INT', @id = @use
 - **Function/Procedure Security**: Review DEFINER vs INVOKER rights
 
 ### Data Protection
+### Additional Security (Advanced Depth Mode)
+- Identify dynamic SQL concatenation patterns (EXEC(@sql)) and classify sanitization safety.
+- Detect exposure of PII-like columns (Email, Phone, NationalID) without masking.
+- Flag use of deprecated encryption / hash algorithms (e.g., SHA1) and suggest stronger (SHA2_256 / Always Encrypted / TDE / AEAD). 
+- Check for potential privilege escalation via EXECUTE AS or ownership chaining edge cases.
+- Evaluate RLS (Row Level Security) expectation: warn if business rules imply tenant isolation but no predicate filtering present.
 - **Sensitive Data Exposure**: Avoid SELECT * on tables with sensitive columns
 - **Audit Logging**: Ensure sensitive operations are logged
 - **Data Masking**: Use views or functions to mask sensitive data
@@ -133,12 +168,23 @@ AND o.order_date < '2025-01-01';
 ```
 
 ### Index Strategy Review
+Additional Index Considerations:
+- Evaluate INCLUDE column opportunities vs widening key.
+- Recommend filtered index (WHERE IsActive=1) when selectivity >> total cardinality.
+- Suggest columnstore for large analytic / aggregation heavy tables.
+- Detect wasted duplicate similar prefixes (idx_A_B_C vs idx_A_B).
 - **Missing Indexes**: Automatically identify columns that need indexing based on query patterns.
 - **Over-Indexing**: Detect unused or redundant indexes.
 - **Composite Indexes**: Recommend multi-column indexes for complex queries.
 - **Index Maintenance**: Check for fragmented or outdated indexes.
 
 ### Execution Plan Analysis
+Advanced Plan Heuristics:
+- Cardinality Misestimation: Flag operators with Actual vs Estimate rows variance > 10x.
+- Residual Predicate Warnings (seek + residual predicate indicates possible missing composite key portion).
+- Parallelism: Check CXPACKET / skew hints (if info provided) and recommend MAXDOP hint only when truly beneficial.
+- Memory Grants: Identify excessive memory grant vs used (< 25% consumed) or spill risk (hash / sort spill).
+- Tempdb Pressure Patterns: Large sort/hash + spool usage.
 - **Table Scans**: Identify and recommend fixes for full table scans.
 - **Expensive Operations**: Highlight high-cost operations and suggest optimizations.
 - **Index Usage**: Ensure indexes are being used effectively in the query.
@@ -200,44 +246,29 @@ WHERE u.status = 'active'
 CREATE TABLE products (
     id BIGINT IDENTITY(1,1) PRIMARY KEY,
     name NVARCHAR(255) NOT NULL,
+   ### Additional Maintainability Checks
+   - Excessive branching / nested IF depth > 4 → propose modularizing into helper SPs / functions.
+   - Repeated literal values → suggest parameters / lookup tables.
+   - Hard-coded business rules vs rule tables (commission tiers, FX windows).
+   - Legacy pattern detection (old style JOIN syntax, implicit cross joins).
+   - Use of SELECT INTO temp tables vs explicit CREATE + INSERT (control over schema).
+   - Error Handling: Ensure TRY/CATCH + XACT_ABORT ON for multi-statement transactional logic.
+   - Idempotency: For deployment / migration scripts, ensure IF EXISTS guards.
     price DECIMAL(10,2) NOT NULL,
     created_at DATETIME2 DEFAULT GETUTCDATE()
-);
-
--- Columnstore indexes for analytics
-CREATE COLUMNSTORE INDEX idx_sales_cs ON sales;
-```
 
 ## 🧪 Testing & Validation
-
-### Data Integrity Checks
-```sql
 -- Verify referential integrity
 SELECT o.user_id 
-FROM orders o 
-LEFT JOIN users u ON o.user_id = u.id 
-WHERE u.id IS NULL;
-
 -- Check for data consistency
 SELECT COUNT(*) as inconsistent_records
-FROM products 
-WHERE price < 0 OR stock_quantity < 0;
-```
 
 ### Performance Testing
-- **Execution Plans**: Automatically generate and analyze execution plans.
-- **Load Testing**: Test queries with realistic data volumes.
-- **Stress Testing**: Verify performance under concurrent load.
 - **Regression Testing**: Ensure optimizations don't break functionality.
-
-## 📊 Common Anti-Patterns
 
 ### N+1 Query Problem
 ```sql
--- ❌ BAD: N+1 queries in application code
 for user in users:
-    orders = query("SELECT * FROM orders WHERE user_id = ?", user.id)
-
 -- ✅ GOOD: Single optimized query
 SELECT u.*, o.*
 FROM users u
@@ -264,19 +295,22 @@ GROUP BY u.name;
 SELECT * FROM orders 
 WHERE YEAR(order_date) = 2024;
 
--- ✅ GOOD: Range conditions use indexes
-SELECT * FROM orders 
-WHERE order_date >= '2024-01-01' 
-  AND order_date < '2025-01-01';
-```
 
 ## 📋 SQL Review Checklist
-
-### Security
-- [ ] All user inputs are parameterized.
 - [ ] No dynamic SQL construction with string concatenation.
-- [ ] Appropriate access controls and permissions.
 - [ ] Sensitive data is properly protected.
+   ## � QUICK REFERENCE CHECKLIST (Condensed)
+   Security: Injection? Dynamic SQL sanitized? PII masked?  
+   Performance: Scans? Missing index? Spills? Parameter sniffing?  
+   Concurrency: Lock escalation risk? Isolation misuse?  
+   Maintainability: Header? Modular? No SELECT *? Consistent naming?  
+   Governance: Retention? Audit trail? Sensitive table unfiltered?  
+   Reliability: Error handling? Idempotent migrations? Time zone safe?
+
+   ---
+
+   Retain original instructions below this line for backward compatibility.
+
 - [ ] SQL injection attack vectors are eliminated.
 
 ### Performance
