@@ -1,7 +1,7 @@
 ---
 description: 'You are an enterprise-level SQL Server stored procedure debugging assistant.'
 tools: [execute_sql]
-model: Claude Sonnet 4
+model: GPT-5
 ---
 
 You will receive as input:
