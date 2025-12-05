@@ -1,12 +1,12 @@
-# VS Code Copilot Chat Modes, Instructions & Prompts Setup
+# VS Code Copilot Custom Agents, Instructions & Prompts Setup
 
-A comprehensive collection of custom chat modes, instruction files, and prompts for GitHub Copilot in Visual Studio Code, designed to enhance AI-assisted development workflows with specialized domain expertise.
+A comprehensive collection of custom agents, instruction files, and prompts for GitHub Copilot in Visual Studio Code, designed to enhance AI-assisted development workflows with specialized domain expertise.
 
 ## Overview
 
 This repository contains three types of Copilot customizations that extend GitHub Copilot's capabilities in VS Code:
 
-- **Chat Modes**: Specialized AI assistants with custom behavior and context
+- **Custom Agents**: Specialized AI assistants with custom behavior and context
 - **Instructions**: Reusable instruction templates for consistent AI guidance  
 - **Prompts**: Pre-defined prompts for common development tasks
 
@@ -14,7 +14,7 @@ These specialized configurations provide domain-specific guidance for database d
 
 ## Types of Copilot Customizations
 
-### 🤖 Chat Modes
+### 🤖 Custom Agents
 Custom instruction sets that modify how GitHub Copilot behaves in specific contexts. They allow you to:
 - Create specialized AI assistants for different domains (SQL, debugging, architecture, etc.)
 - Define specific tools and models to use
@@ -37,14 +37,14 @@ Pre-defined prompts for common development scenarios:
 
 ## Quick Setup Guide
 
-### 1. Creating a New Chat Mode
+### 1. Creating a New Custom Agent
 
 1. **Open VS Code**
 2. **Open Command Palette**: `Ctrl + Shift + P` (Windows/Linux) or `Cmd + Shift + P` (macOS)
-3. **Run Command**: Type and select `Chat: New Mode File`
-4. **Choose Location**: Select `User Data Folder` (recommended for personal use) or `Workspace` (for project-specific modes)
-5. **Name Your Mode**: Enter a descriptive name (e.g., `debug-sp`, `sql-optimizer`, `code-reviewer`)
-6. **Edit the File**: Paste your custom instructions in the generated `.chatmode.md` file
+3. **Run Command**: Type and select `Chat: New Agent File`
+4. **Choose Location**: Select `User Data Folder` (recommended for personal use) or `Workspace` (for project-specific agents)
+5. **Name Your Agent**: Enter a descriptive name (e.g., `debug-sp`, `sql-optimizer`, `code-reviewer`)
+6. **Edit the File**: Paste your custom instructions in the generated `.agent.md` file
 
 ### 2. Creating Instructions
 
@@ -64,9 +64,9 @@ Pre-defined prompts for common development scenarios:
 5. **Name Your Prompt**: Enter a descriptive name (e.g., `SQL-Performance-Check`, `Code-Optimization`, `Bug-Analysis`)
 6. **Edit the File**: Write your prompt content in the generated `.prompt.md` file
 
-### Chat Mode File Structure
+### Custom Agent File Structure
 
-A chat mode file follows this basic structure:
+A custom agent file follows this basic structure:
 
 ```markdown
 ---
@@ -80,10 +80,10 @@ Your detailed instructions and prompts go here...
 
 ## Available Customizations
 
-### 🔧 Chat Modes
+### 🔧 Custom Agents
 
 #### Debug SP (Stored Procedure Debugger)
-**File**: `chatmodes/debug_sp.chatmode.md`
+**File**: `agents/debug_sp.agent.md`
 
 An enterprise-level SQL Server stored procedure debugging assistant that:
 - Analyzes stored procedure dependencies recursively
@@ -97,15 +97,15 @@ An enterprise-level SQL Server stored procedure debugging assistant that:
 
 ### Method 1: Using VS Code Command Palette (Recommended)
 
-#### For Chat Modes:
+#### For Custom Agents:
 1. Open VS Code
 2. Press `Ctrl + Shift + P` to open Command Palette
-3. Type and select `Chat: New Mode File`
+3. Type and select `Chat: New Agent File`
 4. Choose storage location:
    - **User Data Folder**: Available across all VS Code workspaces
    - **Workspace**: Only available in current project
-5. Enter mode name (e.g., `debug-sp`)
-6. VS Code creates a `.chatmode.md` file
+5. Enter agent name (e.g., `debug-sp`)
+6. VS Code creates a `.agent.md` file
 7. Replace the template content with your custom instructions
 
 #### For Instructions:
@@ -140,11 +140,11 @@ Navigate to your VS Code user data folder:
 
 #### Create Folders:
 1. Create folders if they don't exist:
-   - `chatmodes/` for chat mode files
+   - `agents/` for custom agent files
    - `instructions/` for instruction files
    - `prompts/` for prompt files
 2. Create files with appropriate extensions:
-   - `.chatmode.md` for chat modes
+   - `.agent.md` for custom agents
    - `.instructions.md` for instructions
    - `.prompt.md` for prompts
 
@@ -152,7 +152,7 @@ Navigate to your VS Code user data folder:
 
 1. In your project root, create a `.vscode` folder
 2. Inside `.vscode`, create subfolders:
-   - `chatmodes/` 
+   - `agents/` 
    - `instructions/`
    - `prompts/`
 3. Add your files with appropriate extensions
@@ -162,15 +162,15 @@ Navigate to your VS Code user data folder:
 
 ```
 📁 prompts/
-├── 📁 chatmodes/          # Custom chat mode definitions
-│   └── debug_sp.chatmode.md
+├── 📁 agents/             # Custom agent definitions
+│   └── debug_sp.agent.md
 ├── 📁 instructions/       # Reusable instruction templates
 └── 📁 prompts/           # General purpose prompts
 ```
 
 ## Best Practices
 
-### Writing Effective Chat Modes
+### Writing Effective Custom Agents
 
 1. **Clear Description**: Start with a concise description in the frontmatter
 2. **Specific Instructions**: Be explicit about expected behavior and output format
@@ -180,33 +180,33 @@ Navigate to your VS Code user data folder:
 
 ### Naming Conventions
 
-- Use lowercase with hyphens: `debug-sp.chatmode.md`
-- Be descriptive: `sql-performance-analyzer.chatmode.md`
-- Include domain: `frontend-code-reviewer.chatmode.md`
+- Use lowercase with hyphens: `debug-sp.agent.md`
+- Be descriptive: `sql-performance-analyzer.agent.md`
+- Include domain: `frontend-code-reviewer.agent.md`
 
 ### Version Control
 
-- Keep chat modes in version control for team sharing
+- Keep custom agents in version control for team sharing
 - Document changes in commit messages
-- Consider branching for experimental modes
+- Consider branching for experimental agents
 
 ## Usage Examples
 
-### Activating Chat Modes
+### Activating Custom Agents
 
 1. Open Copilot Chat panel (`Ctrl + Shift + I`)
-2. Click the mode selector (usually shows "General")
-3. Select your custom mode from the dropdown
+2. Click the agent selector (usually shows "General")
+3. Select your custom agent from the dropdown
 4. Start chatting with your specialized assistant
 
 ### Sample Interactions
 
-**With Debug SP Mode**:
+**With Debug SP Agent**:
 ```
 @copilot /debug-sp dbo.GetCustomerOrders
 ```
 
-**General Chat with Mode Active**:
+**General Chat with Agent Active**:
 ```
 Can you analyze this stored procedure for performance issues?
 [paste your SQL code]
@@ -214,18 +214,18 @@ Can you analyze this stored procedure for performance issues?
 
 ## Troubleshooting
 
-### Chat Mode Not Appearing
-- Ensure file has `.chatmode.md` extension
+### Custom Agent Not Appearing
+- Ensure file has `.agent.md` extension
 - Check frontmatter syntax (YAML between `---` markers)
-- Restart VS Code to reload modes
+- Restart VS Code to reload agents
 - Verify file location (User Data vs Workspace)
 
 ### General Issues
-- **Mode/Instruction Not Working as Expected**:
+- **Agent/Instruction Not Working as Expected**:
   - Review instruction clarity and specificity
   - Check for conflicting instructions
   - Test with simpler examples first
-  - Validate YAML frontmatter syntax (for chat modes)
+  - Validate YAML frontmatter syntax (for custom agents)
 
 - **Files Not Loading**:
   - Check file extensions are correct
@@ -242,12 +242,12 @@ Can you analyze this stored procedure for performance issues?
 
 When adding new customizations:
 
-### For Chat Modes:
+### For Custom Agents:
 1. Follow the established file structure with proper frontmatter
 2. Include comprehensive documentation and examples
 3. Test thoroughly with various inputs and scenarios
 4. Add usage examples and expected behaviors
-5. Update this README with new modes
+5. Update this README with new agents
 
 ### General Guidelines:
 - Follow established naming conventions
@@ -270,5 +270,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 For issues or questions:
 - Create an issue in this repository
-- Check existing chat modes for examples
+- Check existing custom agents for examples
 - Refer to VS Code Copilot documentation
